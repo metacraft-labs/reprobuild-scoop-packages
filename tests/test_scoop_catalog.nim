@@ -5,20 +5,21 @@ import repro_project_dsl
 import repro_dsl_stdlib/packages/bash as bashInterface
 import repro_dsl_stdlib/packages/cmake as cmakeInterface
 import packages/interfaces/busybox/repro as busyboxInterface
+import packages/interfaces/llvm/repro as llvmInterface
 
 import ../repro as catalog
 
 suite "Scoop provisioning contribution catalog":
   test "publishes pinned contributions without redefining packages":
     let contributions = registeredProvisioningContributions()
-    check contributions.len == 3
+    check contributions.len == 4
     check contributions[0].targetPackage == "bash"
     check contributions[0].targetInterfaceFingerprint.len == 64
     check contributions[0].contributor ==
       "github:metacraft-labs/reprobuild-scoop-packages"
     check contributions[0].scoopProvisioning[0].app == "git"
     let packages = registeredPackages()
-    check packages.len == 4
+    check packages.len == 5
     for contribution in contributions:
       let targets = packages.filterIt(
         it.packageName == contribution.targetPackage)
@@ -27,7 +28,7 @@ suite "Scoop provisioning contribution catalog":
         contribution.targetInterfaceFingerprint
 
     let artifact = artifactFromRegisteredDsl(getCurrentDir() / "repro.nim")
-    check artifact.projectInterface.provisioningContributions.len == 3
+    check artifact.projectInterface.provisioningContributions.len == 4
     let roundTrip = decodeProjectInterfaceArtifact(
       encodeProjectInterfaceArtifact(artifact))
-    check roundTrip.projectInterface.provisioningContributions.len == 3
+    check roundTrip.projectInterface.provisioningContributions.len == 4

@@ -21,6 +21,13 @@ provisioningFor "cmake":
     executablePath = "bin/cmake.exe",
     requiresExecutionProfileChecksum = false
 
+provisioningFor "llvm":
+  interfaceFingerprint "dd6e7be1a7e5636cd6cba71c030bc146d0122f1b923cf5de6a07905f01600aca"
+  contributor "github:metacraft-labs/reprobuild-scoop-packages"
+  scoopApp bucket = "main", app = "llvm", preferredVersion = ">=21",
+    executablePath = "bin/llvm-config.exe",
+    requiresExecutionProfileChecksum = false
+
 package reprobuildScoopPackages:
   devEnv:
     task "test",
