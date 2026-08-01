@@ -11,6 +11,25 @@ if dirExists(libsRoot):
     if kind == pcDir and dirExists(path / "src"):
       switch("path", path / "src")
 
+proc addDependencyPath(envName, siblingName: string) =
+  let root = block:
+    let configured = getEnv(envName)
+    if configured.len > 0: configured
+    else: ".." / siblingName
+  if dirExists(root / "src"):
+    switch("path", root / "src")
+
+addDependencyPath("SHM_QUEUE_SRC", "nim-shm-queue")
+addDependencyPath("SHM_GSET_SRC", "nim-shm-gset")
+addDependencyPath("STACKABLE_HOOKS_SRC", "nim-stackable-hooks")
+
+let packagesRoot = block:
+  let configured = getEnv("REPROBUILD_PACKAGES_ROOT")
+  if configured.len > 0: configured
+  else: ".." / "reprobuild-packages"
+if dirExists(packagesRoot / "packages"):
+  switch("path", packagesRoot)
+
 let nimcryptoRoot = libsRoot / "nimcrypto"
 if fileExists(nimcryptoRoot / "nimcrypto" / "hash.nim"):
   switch("path", nimcryptoRoot)
@@ -23,4 +42,3 @@ if fileExists(blake3Headers / "blake3.h") and
   switch("passC", "-DREPRO_VENDORED_HASH")
   switch("passC", "-I" & blake3Headers)
   switch("passC", "-I" & xxhashHeaders)
-
