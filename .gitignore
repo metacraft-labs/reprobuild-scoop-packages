@@ -1,3 +1,7 @@
 .repro/
 build/
 
+# `nim c -r` drops the linked binary beside its source unless --out
+# points elsewhere, and the test task in repro.nim does not.
+*.exe
+*.pdb
