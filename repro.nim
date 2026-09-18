@@ -102,5 +102,5 @@ provisioningFor "prek":
 package reprobuildScoopPackages:
   devEnv:
     task "test",
-      command = "nim c -r --nimcache:build/nimcache-scoop-catalog tests/test_scoop_catalog.nim",
+      command = "nim c -r --nimcache:build/nimcache-scoop-catalog --out:build/test-scoop-catalog tests/test_scoop_catalog.nim",
       description = "Validate the Scoop contribution catalog"
