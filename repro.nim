@@ -1,4 +1,5 @@
 import repro_project_dsl
+import repro_dsl_stdlib/foreign_env
 
 ## Scoop realizations for package interfaces owned elsewhere.
 ##
@@ -101,6 +102,9 @@ provisioningFor "prek":
 
 package reprobuildScoopPackages:
   devEnv:
+    # Reuse the workspace toolchain until native provisioning replaces the flake.
+    when not defined(windows):
+      useFlakeDevShell("..")
     task "test",
       command = "nim c -r --nimcache:build/nimcache-scoop-catalog --out:build/test-scoop-catalog tests/test_scoop_catalog.nim",
       description = "Validate the Scoop contribution catalog"
